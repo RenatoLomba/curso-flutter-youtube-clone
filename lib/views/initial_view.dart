@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:youtube_clone/api.dart';
 
 class InitialView extends StatefulWidget {
   const InitialView({super.key});
@@ -8,8 +9,12 @@ class InitialView extends StatefulWidget {
 }
 
 class _InitialViewState extends State<InitialView> {
+  final Api api = Api();
+
   @override
   Widget build(BuildContext context) {
+    api.search('');
+
     return const Center(child: Text('Início'));
   }
 }
