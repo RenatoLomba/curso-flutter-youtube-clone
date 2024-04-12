@@ -3,7 +3,9 @@ import 'package:youtube_clone/api.dart';
 import 'package:youtube_clone/models/video.dart';
 
 class InitialView extends StatefulWidget {
-  const InitialView({super.key});
+  const InitialView({super.key, required this.query});
+
+  final String query;
 
   @override
   State<InitialView> createState() => _InitialViewState();
@@ -12,12 +14,12 @@ class InitialView extends StatefulWidget {
 class _InitialViewState extends State<InitialView> {
   final Api api = Api();
 
-  Future<List<Video>> _getVideos() async => api.search('');
+  Future<List<Video>> _getVideos(String query) async => api.search(query);
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Video>>(
-      future: _getVideos(),
+      future: _getVideos(widget.query),
       builder: (_, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.none:

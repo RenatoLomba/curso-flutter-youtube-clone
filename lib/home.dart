@@ -14,18 +14,27 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _currentNavigationIndex = 0;
+  String _queryResult = '';
 
   @override
   Widget build(BuildContext context) {
     List<Widget> views = [
-      const InitialView(),
+      InitialView(
+        query: _queryResult,
+      ),
       const OnTopView(),
       const SubscriptionsView(),
       const LibraryView(),
     ];
 
     return Scaffold(
-      appBar: const MyAppBar(),
+      appBar: MyAppBar(
+        onSearch: (query) {
+          setState(() {
+            _queryResult = query;
+          });
+        },
+      ),
       body: views[_currentNavigationIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

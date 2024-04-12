@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-
+import 'package:youtube_clone/components/custom_search_delegate.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const MyAppBar({super.key});
+  const MyAppBar({super.key, required this.onSearch});
+
+  final Function(String val) onSearch;
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -30,16 +32,18 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: AppBar(
         actions: [
           IconButton(
-            icon: const Icon(Icons.videocam),
-            onPressed: () {},
-          ),
-          IconButton(
             icon: const Icon(Icons.search),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: const Icon(Icons.account_circle),
-            onPressed: () {},
+            onPressed: () async {
+              String? queryResult = await showSearch(
+                context: context,
+                delegate: CustomSearchDelegate(),
+              );
+
+              if (queryResult != null && queryResult.isNotEmpty) {
+                onSearch(queryResult);
+              }
+            },
+            tooltip: 'Search',
           ),
         ],
         iconTheme: const IconThemeData(
