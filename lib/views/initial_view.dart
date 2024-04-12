@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:youtube_clone/api.dart';
 import 'package:youtube_clone/models/video.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class InitialView extends StatefulWidget {
   const InitialView({super.key, required this.query});
@@ -47,22 +48,45 @@ class _InitialViewState extends State<InitialView> {
               itemBuilder: (_, idx) {
                 var video = videos[idx];
 
-                return Column(
-                  children: [
-                    Container(
-                      height: 200,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(video.thumbnailUrl),
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (ctx) => YoutubePlayer(
+                        controller: YoutubePlayerController(
+                          initialVideoId: video.id,
+                          flags: const YoutubePlayerFlags(
+                            autoPlay: true,
+                            mute: false,
+                          ),
+                        ),
+                        showVideoProgressIndicator: true,
+                        topActions: [
+                          IconButton(
+                            icon: const Icon(Icons.arrow_back),
+                            color: Colors.white,
+                            onPressed: () => Navigator.pop(ctx),
+                          )
+                        ],
+                      ),
+                    ));
+                  },
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 200,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(video.thumbnailUrl),
+                          ),
                         ),
                       ),
-                    ),
-                    ListTile(
-                      title: Text(video.title),
-                      subtitle: Text(video.channel),
-                    )
-                  ],
+                      ListTile(
+                        title: Text(video.title),
+                        subtitle: Text(video.channel),
+                      )
+                    ],
+                  ),
                 );
               },
             );
